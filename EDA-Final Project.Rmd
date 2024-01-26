@@ -1,0 +1,306 @@
+---
+title: "EDA- Final Project"
+author: "Nini Curcione"
+date: '2022-11-01'
+output: pdf_document
+---
+
+## Loading Libraries 
+```{r}
+library(mosaic)
+library(readr)
+library(ggplot2);
+library(readxl)
+library(tidyverse)
+library(stats)
+library(mosaic)
+library(dplyr) 
+```
+
+## Importing Dataset
+```{r}
+
+Dataset1 <- read.csv("~/Desktop/DATA231/Project /Data/Dataset1.csv")
+```
+
+## 5 Number Summary and Histogram for Life Expectancy
+```{r}
+favstats(Dataset1$LifeExpectancy)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=LifeExpectancy)) 
+```
+
+## 5 Number Summary and Histogram for GDP Per Capita 
+```{r}
+favstats(Dataset1$GDPperCapita)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=GDPperCapita)) 
+```
+
+## 5 Number Summary and Histogram for Food Supply
+```{r}
+favstats(Dataset1$FoodSupply)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=FoodSupply)) 
+```
+
+## 5 Number Summary and Histogram for High Tech Export
+```{r}
+favstats(Dataset1$HighTechExport)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=HighTechExport)) 
+```
+
+## 5 Number Summary and Histogram for School Years 
+```{r}
+favstats(Dataset1$SchoolYears)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=SchoolYears)) 
+```
+
+## 5 Number Summary and Histogram for Basic Sanitation  
+```{r}
+favstats(Dataset1$BasicSanitation)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=BasicSanitation)) 
+```
+
+## 5 Number Summary and Histogram for Alcohol Consumption 
+```{r}
+favstats(Dataset1$AlcoholConsumption)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=AlcoholConsumption)) 
+```
+
+## 5 Number Summary and Histogram for BroadBand Subscribers
+```{r}
+favstats(Dataset1$BroadbandSubscribers)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=BroadbandSubscribers)) 
+```
+
+## 5 Number Summary and Histogram for MCV 
+```{r}
+favstats(Dataset1$mcvImmunized)
+ggplot(data=Dataset1) +
+  geom_histogram(mapping = aes(x=mcvImmunized)) 
+```
+
+
+## We will plot LifeExpectancy against each of the potential explanatory variables.
+```{r}
+pairs(~LifeExpectancy + GDPperCapita + FoodSupply + HighTechExport, data = Dataset1)
+pairs(~LifeExpectancy + mcvImmunized + BasicSanitation + AlcoholConsumption, data = Dataset1)
+pairs(~LifeExpectancy + BroadbandSubscribers + SchoolYears, data = Dataset1)
+```
+
+### Most of the variables seem to have some kind of positive linear assosiation with LifeExpectancy, and GDPperCapita, HighTechExport and broadband subscribers have curverd relationships.
+
+
+## Scatterplots of each predictor against LifeExpectancy
+
+### AlcoholConsumption
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=AlcoholConsumption, y=LifeExpectancy)) +
+    geom_abline()
+```
+
+### FoodSupply
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=FoodSupply, y=LifeExpectancy)) + ggtitle("Life Expectancy in function of Food Supply") + labs(x = "FoodSupply", y = "LifeExpectancy" )
+```
+
+### BroadbandSubscribers
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=BroadbandSubscribers, y=LifeExpectancy)) + ggtitle("Life Expectancy in function of BroadbandSubscribers") + labs(x = "BroadbandSubscribers", y = "LifeExpectancy" )
+```
+
+### mcvImmunized
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=mcvImmunized, y=LifeExpectancy)) +
+    geom_abline()
+```
+
+### BasicSanitation
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=BasicSanitation, y=LifeExpectancy)) +
+    geom_abline()
+```
+
+### HighTechExport
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=HighTechExport, y=LifeExpectancy)) +
+    geom_abline()
+```
+
+### SchoolYears
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=SchoolYears, y=LifeExpectancy)) + ggtitle("Figure 3: Life Expectancy in function of Average School Years") + labs(x = "SchoolYears", y = "LifeExpectancy" )
+```
+
+### GDPperCapita
+```{r}
+ggplot(data=Dataset1) +
+  geom_point(mapping = aes(x=GDPperCapita, y=LifeExpectancy)) +
+    geom_abline()
+```
+
+
+## Transformations
+
+### GDPperCapita and HighTechExport bear some sort of curved relationship with Life Expectancy. We can visualize plots of the logged values of the predictor and explanatory variable.
+```{r}
+ggplot(data = Dataset1) + geom_point(mapping = aes(x = log(GDPperCapita), y = log(LifeExpectancy))) + ggtitle("Log of Life Expectancy in function of GDP per Capita") + labs(x = "Log of GDPperCapita", y = "Log of Life Expectancy" )
+ggplot(data = Dataset1) + geom_point(mapping = aes(x = log(HighTechExport), y = log(LifeExpectancy))) + ggtitle("Log of Life Expectancy in function of HighTechExport") + labs(x = "Log of HighTechExport", y = "Log of Life Expectancy" )
+```
+
+### BroadbandSubscribers also seems to have some curved relationship with Life Expectancy. Lets also visualize plots of the logged values.
+```{r}
+ggplot(data = Dataset1) + geom_point(mapping = aes(x = log(BroadbandSubscribers), y = log(LifeExpectancy))) + ggtitle("Figure 4: Log of Life Expectancy in function of BroadbandSubscribers") + labs(x = "Log of BroadbandSubscribers", y = "Log of Life Expectancy" )
+```
+
+### Model of logged of the other variables
+```{r}
+Model=lm(LifeExpectancy~ mcvImmunized + BasicSanitation + HighTechExport + SchoolYears + BroadbandSubscribers
+         + GDPperCapita + FoodSupply, data=Dataset1) 
+summary(Model)
+plot(Model)
+```
+
+### Matrix Correlation of all Variables
+```{r}
+a <- Dataset1 %>% select(LifeExpectancy, BasicSanitation, BroadbandSubscribers, AlcoholConsumption, mcvImmunized, FoodSupply, SchoolYears, GDPperCapita, HighTechExport)
+cor <- round(cor(a), 2)
+cor
+```
+
+### It can be seen that despite the curved relationship between BroadbandSubscribers and LifeExpectancy, the conditions are met and the R-squared is high
+```{r}
+model1 <- lm(LifeExpectancy~BasicSanitation + BroadbandSubscribers, data=Dataset1)
+summary(model1)
+plot(model1)
+```
+
+### After logging the variables the result was worse than the original 
+```{r}
+logmodel1 <- lm(log(LifeExpectancy)~BasicSanitation + log(BroadbandSubscribers), data=Dataset1)
+summary(logmodel1)
+plot(logmodel1)
+```
+
+### From stepwise and the backward and forward methods, it is possible to see that the best model contains BasicSanitation, BroadbandSubscribers, GDPperCapita, mcvImmunized and AlcoholConsumption as predictors. Despite the lower mallow cp, it still has the same R-squared as the two variable model containing only BasicSanitation and BroadbandSubscribers
+```{r}
+all <- lm(LifeExpectancy~mcvImmunized + BasicSanitation + HighTechExport + SchoolYears + BroadbandSubscribers
+         + GDPperCapita + FoodSupply + AlcoholConsumption, data=Dataset1)
+MSE <- (summary(all)$sigma)^2
+
+step(all, scale=MSE, direction="backward")
+
+none <- lm(LifeExpectancy~1,data=Dataset1)
+step(none, scope=list(upper=all), scale=MSE, direction="forward")
+
+step(none, scope=list(upper=all), scale=MSE)
+```
+
+### To balance R-squared, complexity and Mallow Cp, I am going to try models combining GDPperCapita, mcvImmunized and AlcoholConsumption added to the two variable model to see which combination is best.
+
+```{r}
+stepmodel <- lm(LifeExpectancy~mcvImmunized + BasicSanitation + BroadbandSubscribers
+         + GDPperCapita + AlcoholConsumption, data=Dataset1)
+summary(stepmodel)
+plot(stepmodel)
+extractAIC(stepmodel, scale=MSE)
+```
+
+```{r}
+stepmodel2 <- lm(LifeExpectancy~BasicSanitation + BroadbandSubscribers
+         + GDPperCapita + AlcoholConsumption, data=Dataset1)
+summary(stepmodel2)
+plot(stepmodel2)
+extractAIC(stepmodel2, scale=MSE)
+```
+
+```{r}
+stepmodel3 <- lm(LifeExpectancy~mcvImmunized + BasicSanitation + BroadbandSubscribers
+         + GDPperCapita, data=Dataset1)
+summary(stepmodel3)
+plot(stepmodel3)
+extractAIC(stepmodel3, scale=MSE)
+```
+
+```{r}
+stepmodel4 <- lm(LifeExpectancy~mcvImmunized + BasicSanitation + BroadbandSubscribers
+          + AlcoholConsumption, data=Dataset1)
+summary(stepmodel4)
+plot(stepmodel4)
+extractAIC(stepmodel4, scale=MSE)
+```
+
+```{r}
+stepmodel5 <- lm(LifeExpectancy~ BasicSanitation + BroadbandSubscribers
+         + GDPperCapita, data=Dataset1)
+summary(stepmodel5)
+plot(stepmodel5)
+extractAIC(stepmodel5, scale=MSE)
+```
+
+```{r}
+stepmodel6 <- lm(LifeExpectancy~mcvImmunized + BasicSanitation 
+                 + BroadbandSubscribers, data=Dataset1)
+summary(stepmodel6)
+plot(stepmodel6)
+extractAIC(stepmodel6, scale=MSE)
+```
+
+```{r}
+stepmodel7 <- lm(LifeExpectancy~BasicSanitation + BroadbandSubscribers
+             + AlcoholConsumption, data=Dataset1)
+summary(stepmodel7)
+plot(stepmodel7)
+extractAIC(stepmodel7, scale=MSE)
+
+```
+
+```{r}
+stepmodel8 <- lm(LifeExpectancy~BasicSanitation + BroadbandSubscribers, data=Dataset1)
+summary(stepmodel8)
+plot(stepmodel8)
+extractAIC(stepmodel8, scale=MSE)
+```
+
+## Final Model 
+
+### The final model selected consists of BasicSanitation, BroadbandSubscribers and mcvImmunized as predictors.
+The obtained model has high R-squared, a relatively mallow Cp, and the linearity, constant variance, and normality conditions seem to be met. 
+```{r}
+final <- lm(LifeExpectancy~ BasicSanitation + 
+            BroadbandSubscribers + mcvImmunized, data=Dataset1)
+summary(final)
+plot(final)
+extractAIC(final, scale=MSE)
+anova(final)
+```
+
+### Confidence Interval for final model
+```{r}
+confint(final)
+```
+
+
+
+
+
+
+
+
+
+
+
+
